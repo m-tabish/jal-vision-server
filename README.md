@@ -82,11 +82,7 @@ We welcome contributions! Please see our [Contribution Guidelines](#contribution
 
 Thank you for your contributions!
 
-## 👥 Contributors
 
-- [Kaustubh Pandey](https://github.com/kaustubh-2003)
-- [Shrinjay Shresth](https://github.com/shrinjayshresth1)
-- [Harshita Singh](https://github.com/hsingh)
 
 ## 📄 License
 
