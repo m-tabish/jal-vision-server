@@ -1,0 +1,26 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma_client_js"
+}
+ 
+model central_data { 
+  id String @id @default("00000") // This will be village-name used as primary key
+  state_ut  String   
+  tehsil_block String
+  latitude Float
+  longitude Float
+  well_site_type String
+  water_level Float
+}
+
+model device_data { 
+  id    String    @id @default("00000") // This will be device-id present in the 2nd row of the data used as primary key
+  date  String   
+  battery_voltage Float
+  water_level Float
+}
+ 
