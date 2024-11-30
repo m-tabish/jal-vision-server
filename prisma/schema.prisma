@@ -1,14 +1,32 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
 
 generator client {
   provider = "prisma-client-js"
 }
 
-datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+model Central_Data_Schema {
+  id             String        @id @default("00000") // here village-name has been used as id
+  state_ut       String
+  tehsil_block   String
+  latitude       Float
+  longitude      Float
+  well_site_type String
+  water_level    Float
+  central_data_array Central_Data_array? @relation(fields: [centralDataArrayId], references: [id])
+  centralDataArrayId String?
+}
+
+model Central_Data_array {
+  id           String                @id @default("00000")
+  central_data Central_Data_Schema[]
+}
+
+model Device_data {
+  id              String @id @default("00000") //here information in row 2 has been used as id 
+  date            String
+  battery_voltage Float
+  water_level     Float
 }
