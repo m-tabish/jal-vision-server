@@ -11,22 +11,27 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 const client_1 = require("@prisma/client");
 const prisma = new client_1.PrismaClient();
-const insertCentralData = (_single_central_data) => __awaiter(void 0, void 0, void 0, function* () {
-    if (!_single_central_data || Array.isArray(_single_central_data)) {
+const updateCentralData = (_new_central_data) => __awaiter(void 0, void 0, void 0, function* () {
+    let res;
+    if (!_new_central_data) {
         return "No data";
     }
     // Inserting each data of the village into central_table
-    yield prisma.central_Data_Schema.create({
-        data: {
-            id: _single_central_data.id,
-            state_ut: _single_central_data.state_ut,
-            tehsil_block: _single_central_data.tehsil_block,
-            latitude: _single_central_data.latitude,
-            longitude: _single_central_data.longitude,
-            well_site_type: _single_central_data.well_site_type,
-            water_level: _single_central_data.water_level,
+    yield prisma.central_Data_Schema.upsert({
+        where: { id: _new_central_data.id },
+        update: {
+            water_level: _new_central_data.water_level,
+        },
+        create: {
+            id: _new_central_data.id, // Include the ID when creating
+            state_ut: _new_central_data.state_ut,
+            tehsil_block: _new_central_data.tehsil_block,
+            latitude: _new_central_data.latitude,
+            longitude: _new_central_data.longitude,
+            well_site_type: _new_central_data.well_site_type,
+            water_level: _new_central_data.water_level,
         },
     });
     return "Data entered";
 });
-exports.default = insertCentralData;
+exports.default = updateCentralData;

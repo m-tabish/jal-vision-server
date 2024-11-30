@@ -5,7 +5,6 @@ const prisma = new PrismaClient();
 const insertCentralData = async (
 	_single_central_data: Central_Data_Schema | null
 ): Promise<String> => {
-	let res;
 	if (!_single_central_data || Array.isArray(_single_central_data)) {
 		return "No data";
 	}

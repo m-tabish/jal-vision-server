@@ -1,10 +1,15 @@
 # 🌐 Jal Vision Server
 
-This is an Express.js project for the Jal Vision Server.
+This is an Express.js project for the Jal Vision Server using TypeScript and Prisma.
+
+##### <span  style="color: gold;">For API Endpoints refer to <a  href= "./Docs/docs.md">Docs</a></span>
 
 ## 📋 Prerequisites
 
 - Node.js
+- Typescript
+- Prisma ORM
+- A PostgreSQL database url
 - Docker (for running with Docker)
 
 ## 🛠️ Installation
@@ -19,22 +24,38 @@ This is an Express.js project for the Jal Vision Server.
 2. Install dependencies:
 
    ```sh
-   npm install nodemon dotenv
+   npm install typescript prisma dotenv @prisma/cli --save-dev
    ```
 
-3. Create a `.env` file in the root directory and add your environment variables:
+3. Initialise Prisma
+   ```bash
+   npx prisma init
+   ```
+4. Create a `.env` file in the root directory and add your environment variables:
 
    ```sh
-   touch .env
+   (Linux) touch .env
+   (Windows) echo > .env
    ```
 
    Example `.env` file:
 
    ```env
-   ...
+   DATABASE_URL="your-database-url"
    ```
 
-4. Running Locally:
+5. Generate Prisma client:
+
+   ```sh
+   npx prisma generate
+   ```
+
+   1. If you are already running a database, run:
+      ```bash
+         npx prisma migrate dev --name <A checkpoint name to mark your migration>
+      ```
+
+6. Running Locally:
 
    ```sh
    npm run dev
@@ -81,8 +102,6 @@ We welcome contributions! Please see our [Contribution Guidelines](#contribution
 6. Create a pull request.
 
 Thank you for your contributions!
-
-
 
 ## 📄 License
 

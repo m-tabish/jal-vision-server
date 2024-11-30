@@ -12,8 +12,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const express_1 = __importDefault(require("express"));
 const dotenv_1 = __importDefault(require("dotenv"));
+const express_1 = __importDefault(require("express"));
 const insert_1 = __importDefault(require("./utils/insert"));
 dotenv_1.default.config();
 const app = (0, express_1.default)();
@@ -25,7 +25,7 @@ const central_data = {
     latitude: 25.3812,
     longitude: 82.5687,
     well_site_type: "Borewell",
-    water_level: 100,
+    water_level: 62,
 };
 app.get("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     yield (0, insert_1.default)(central_data);

@@ -11,22 +11,18 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 const client_1 = require("@prisma/client");
 const prisma = new client_1.PrismaClient();
-const insertCentralData = (_single_central_data) => __awaiter(void 0, void 0, void 0, function* () {
-    if (!_single_central_data || Array.isArray(_single_central_data)) {
-        return "No data";
+const read_central_data = (id) => __awaiter(void 0, void 0, void 0, function* () {
+    let res;
+    try {
+        res = yield prisma.central_Data_Schema.findUnique({
+            where: { id: id },
+        });
+        if (!res) {
+            return "Data not found";
+        }
+        return res;
     }
-    // Inserting each data of the village into central_table
-    yield prisma.central_Data_Schema.create({
-        data: {
-            id: _single_central_data.id,
-            state_ut: _single_central_data.state_ut,
-            tehsil_block: _single_central_data.tehsil_block,
-            latitude: _single_central_data.latitude,
-            longitude: _single_central_data.longitude,
-            well_site_type: _single_central_data.well_site_type,
-            water_level: _single_central_data.water_level,
-        },
-    });
-    return "Data entered";
+    catch (e) {
+        return new Error("An error occurred while fetching data");
+    }
 });
-exports.default = insertCentralData;
