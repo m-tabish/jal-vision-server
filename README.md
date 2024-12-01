@@ -2,7 +2,7 @@
 
 This is an Express.js project for the Jal Vision Server using TypeScript and Prisma.
 
-##### <span  style="color: gold;">For API Endpoints refer to <a  href= "./Docs/docs.md">Docs</a></span>
+##### <span  style="color: gold;">For API Endpoints refer to <a  href= "https://github.com/m-tabish/jal-vision-server/blob/main/Docs/docs.md " target = "_blank">Docs</a></span>
 
 ## 📋 Prerequisites
 
@@ -24,10 +24,10 @@ This is an Express.js project for the Jal Vision Server using TypeScript and Pri
 2. Install dependencies:
 
    ```sh
-   npm install typescript prisma dotenv @prisma/cli --save-dev
+   npm install typescript prisma dotenv @prisma/client --save-dev
    ```
 
-3. Initialise Prisma
+3. Initialize Prisma
    ```bash
    npx prisma init
    ```

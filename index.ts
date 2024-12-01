@@ -7,6 +7,7 @@ dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+app.use(express.json());
 const central_data = {
 	id: "3",
 	state_ut: "Uttar Pradesh",
@@ -19,17 +20,29 @@ const central_data = {
 app.get("/", async (req: Request, res: Response) => {
 	res.send("Hello World");
 });
+
 app.post("/insert", async (req: Request, res: Response): Promise<void> => {
-	const result = await insertCentralData(central_data);
+	const data = req.body.data;
+	console.log(data);
+	const result = await insertCentralData(data);
 	res.send(result);
 });
 
 app.post("/update", async (req: Request, res: Response): Promise<void> => {
-	const result = await updateCentralData(central_data);
-	res.send(result);
+	try {
+		const data = req.body.data;
+		console.log(data);
+		if (!central_data) {
+			res.status(400).send("Invalid Input");
+		}
+		const result = await updateCentralData(central_data);
+		res.send(result);
+	} catch (error) {
+		res.status(500).send(error);
+	}
 });
 
-app.get("/read/:id", async (req: Request, res: Response): Promise<void> => {
+app.get("/read/:id/:authority", async (req: Request, res: Response): Promise<void> => {
 	const id = req.params.id;
 	console.log(id + " s");
 

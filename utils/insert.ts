@@ -4,9 +4,9 @@ const prisma = new PrismaClient();
 
 const insertCentralData = async (
 	_single_central_data: Central_Data_Schema | null
-): Promise<String> => {
+): Promise<Error | Central_Data_Schema | String> => {
 	if (!_single_central_data || Array.isArray(_single_central_data)) {
-		return "No data";
+		return new Error("No data");
 	}
 
 	// Inserting each data of the village into central_table

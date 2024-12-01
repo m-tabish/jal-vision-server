@@ -7,6 +7,7 @@ generator client {
   provider = "prisma-client-js"
 }
 
+
 model Central_Data_Schema {
   id             String        @id @default("00000") // here village-name has been used as id
   state_ut       String
@@ -14,15 +15,13 @@ model Central_Data_Schema {
   latitude       Float
   longitude      Float
   well_site_type String
-  water_level    Float
-  central_data_array Central_Data_array? @relation(fields: [centralDataArrayId], references: [id])
-  centralDataArrayId String?
+  water_level    Float 
 }
 
-model Central_Data_array {
-  id           String                @id @default("00000")
-  central_data Central_Data_Schema[]
-}
+// model Central_Data_array {
+//   id           String                @id @default("00000")
+//   central_data Central_Data_Schema[]
+// }
 
 model Device_data {
   id              String @id @default("00000") //here information in row 2 has been used as id 
