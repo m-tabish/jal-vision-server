@@ -8,7 +8,7 @@ generator client {
 }
 
 
-model Central_Data_Schema {
+model Central_Data {
   id             String        @id @default("00000") // here village-name has been used as id
   state_ut       String
   tehsil_block   String
@@ -16,6 +16,8 @@ model Central_Data_Schema {
   longitude      Float
   well_site_type String
   water_level    Float 
+  state_id       Int
+  district_id    Int
 }
 
 // model Central_Data_array {
@@ -28,4 +30,18 @@ model Device_data {
   date            String
   battery_voltage Float
   water_level     Float
+
+}  
+ 
+model User {
+  id        Int     @id @default(autoincrement())
+  username  String  @unique
+  password  String
+  role      Role
+}
+
+enum Role {
+  ADMIN
+  STATE
+  DISTRICT
 }
