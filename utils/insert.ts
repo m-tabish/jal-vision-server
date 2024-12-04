@@ -1,16 +1,16 @@
 import { PrismaClient } from "@prisma/client";
-import { Central_Data_Schema } from "../interfaces_types";
+import { central_Data } from "../interfaces_types";
 const prisma = new PrismaClient();
 
 const insertCentralData = async (
-	_single_central_data: Central_Data_Schema | null
-): Promise<Error | Central_Data_Schema | String> => {
+	_single_central_data: central_Data | null
+): Promise<Error | central_Data | String> => {
 	if (!_single_central_data || Array.isArray(_single_central_data)) {
 		return new Error("No data");
 	}
 
 	// Inserting each data of the village into central_table
-	await prisma.central_Data_Schema.create({
+	await prisma.central_Data.create({
 		data: {
 			id: _single_central_data.id,
 			state_ut: _single_central_data.state_ut,
