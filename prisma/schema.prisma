@@ -9,7 +9,7 @@ generator client {
 
 
 model Central_Data {
-  id             String        @id @default("00000") // here village-name has been used as id
+  id             Int           @id @default(autoincrement()) // here village-name has been used as id
   state_ut       String
   tehsil_block   String
   latitude       Float

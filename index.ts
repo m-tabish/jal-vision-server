@@ -2,32 +2,17 @@ import { PrismaClient } from "@prisma/client";
 import dotenv from "dotenv";
 import express, { Request, Response } from "express";
 import sessionMiddleware from "./middleware/sessionMiddleware";
-import bodyParser from 'body-parser';
 import adminRoutes from "./routes/admin";
 import districtRoutes from "./routes/district";
 import stateRoutes from "./routes/state";
 import insertCentralData from "./utils/insert";
-import readCentralData from "./utils/read";
-import updateCentralData from "./utils/update";
-import alertRoutes from "./routes/alert";
+import { User } from "./interfaces_types/index";
 dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 app.use(express.json());
-app.use(bodyParser.json());
 app.use(sessionMiddleware);
-
-//Dummy data
-const central_data = {
-	id: "3",
-	state_ut: "Uttar Pradesh",
-	tehsil_block: "Bhadohi",
-	latitude: 25.3812,
-	longitude: 82.5687,
-	well_site_type: "Borewell",
-	water_level: 62,
-};
 
 app.get("/", async (req: Request, res: Response) => {
 	res.send("Hello World");
@@ -48,47 +33,39 @@ app.post("/login", async (req: Request, res: Response) => {
 		res.json({ message: "Login successful", role: user.role });
 	}
 });
-
-//alert route
-// app.use("/api/alerts", alertRoutes);
-
-app.use('/api', alertRoutes);
-
 app.use("/central", adminRoutes);
 app.use("/state", stateRoutes);
 app.use("/district", districtRoutes);
 
-// app.post("/insert", async (req: Request, res: Response): Promise<void> => {
-// 	const data = req.body.data;
-// 	console.log(data);
-// 	const result = await insertCentralData(data);
-// 	res.send(result);
-// });
+// Centrall Table
+app.post("/insert", async (req: Request, res: Response): Promise<void> => {
+	const data = req.body.data;
+	if (!data) {
+		res.status(400).send("Invalid Input");
+		return;
+	}
+	console.log(data);
+	const result = await insertCentralData(data);
+	res.send(result);
+});
 
-// app.post("/update", async (req: Request, res: Response): Promise<void> => {
-// 	try {
-// 		const data = req.body.data;
-// 		console.log(data);
-// 		if (!central_data) {
-// 			res.status(400).send("Invalid Input");
-// 		}
-// 		const result = await updateCentralData(central_data);
-// 		res.send(result);
-// 	} catch (error) {
-// 		res.status(500).send(error);
-// 	}
-// });
+// User table
+app.post("/user", async (req: Request, res: Response) => {
+	const user = req.body.user;
+	try {
+		if (!user) {
+			res.status(400).send("Invalid input");
+		}
+		console.log(user);
 
-// app.get(
-// 	"/read/:id/:authority",
-// 	async (req: Request, res: Response): Promise<void> => {
-// 		const id = req.params.id;
-// 		console.log(id + " s");
-
-// 		const result = await readCentralData(id);
-// 		res.send(result);
-// 	}
-// );
+		const newUser = await prisma.user.create({	
+			data: user,
+		});
+		res.status(201).send(newUser);
+	} catch (error) {
+		res.status(400).send("Error in entering User" + error);
+	}
+});
 
 app.listen(PORT, () => {
 	console.log(`Server is running on http://localhost:${PORT}`);
