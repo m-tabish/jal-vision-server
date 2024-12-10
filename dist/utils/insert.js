@@ -13,10 +13,10 @@ const client_1 = require("@prisma/client");
 const prisma = new client_1.PrismaClient();
 const insertCentralData = (_single_central_data) => __awaiter(void 0, void 0, void 0, function* () {
     if (!_single_central_data || Array.isArray(_single_central_data)) {
-        return "No data";
+        return new Error("No data");
     }
     // Inserting each data of the village into central_table
-    yield prisma.central_Data_Schema.create({
+    yield prisma.central_Data.create({
         data: {
             id: _single_central_data.id,
             state_ut: _single_central_data.state_ut,

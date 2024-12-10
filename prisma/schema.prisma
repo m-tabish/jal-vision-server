@@ -20,10 +20,33 @@ model Central_Data {
   district_id    Int
 }
 
-// model Central_Data_array {
-//   id           String                @id @default("00000")
-//   central_data Central_Data_Schema[]
-// }
+//table for alert send by db alert table
+model Alert {
+  id           Int       @id @default(autoincrement())
+  state        String
+  district     String
+  tehsilBlock  String
+  name         String
+  villageName  String
+  siteName     String
+  latitude     Float
+  longitude    Float
+  wellSiteType String
+  waterLevel   Float?
+  alertType    AlertType
+  alertMessage String
+  timestamp    DateTime  @default(now())
+}
+
+enum AlertType {
+  HIGH_WATER_LEVEL
+  LOW_WATER_LEVEL
+  SENSOR_FAILURE
+  BATTERY_LOW
+}
+
+
+
 
 model Device_data {
   id              String @id @default("00000") //here information in row 2 has been used as id 

@@ -2,17 +2,20 @@ import { PrismaClient } from "@prisma/client";
 import dotenv from "dotenv";
 import express, { Request, Response } from "express";
 import sessionMiddleware from "./middleware/sessionMiddleware";
+import bodyParser from 'body-parser';
 import adminRoutes from "./routes/admin";
 import districtRoutes from "./routes/district";
 import stateRoutes from "./routes/state";
 import insertCentralData from "./utils/insert";
 import readCentralData from "./utils/read";
 import updateCentralData from "./utils/update";
+import alertRoutes from "./routes/alert";
 dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 app.use(express.json());
+app.use(bodyParser.json());
 app.use(sessionMiddleware);
 
 //Dummy data
@@ -45,6 +48,12 @@ app.post("/login", async (req: Request, res: Response) => {
 		res.json({ message: "Login successful", role: user.role });
 	}
 });
+
+//alert route
+// app.use("/api/alerts", alertRoutes);
+
+app.use('/api', alertRoutes);
+
 app.use("/central", adminRoutes);
 app.use("/state", stateRoutes);
 app.use("/district", districtRoutes);
