@@ -6,10 +6,19 @@ import adminRoutes from "./routes/admin";
 import districtRoutes from "./routes/district";
 import stateRoutes from "./routes/state";
 import insertCentralData from "./utils/insert";
-import { User } from "./interfaces_types/index";
-dotenv.config();
+import { User, Role } from "./interfaces_types/index";
+import cors from "cors";
+const corsOptions = {
+	origin: "http://localhost:5173",
+	optionsSuccessStatus: 200,
+};
+import jsreport from "jsreport-core";
+const jsreportInstance = jsreport();
 
 const app = express();
+app.use(cors(corsOptions));
+dotenv.config();
+
 const PORT = process.env.PORT || 3000;
 app.use(express.json());
 app.use(sessionMiddleware);
@@ -20,24 +29,11 @@ app.get("/", async (req: Request, res: Response) => {
 
 const prisma = new PrismaClient();
 
-app.post("/login", async (req: Request, res: Response) => {
-	const { username, password } = req.body;
-
-	const user = await prisma.user.findUnique({
-		where: { username },
-	});
-	if (!user || user.password !== password) {
-		res.status(500).send("Invalid Credentials");
-	} else {
-		req.session.user = { id: user.id, role: user.role };
-		res.json({ message: "Login successful", role: user.role });
-	}
-});
 app.use("/central", adminRoutes);
 app.use("/state", stateRoutes);
 app.use("/district", districtRoutes);
 
-// Centrall Table
+// Central Table
 app.post("/insert", async (req: Request, res: Response): Promise<void> => {
 	const data = req.body.data;
 	if (!data) {
@@ -50,20 +46,59 @@ app.post("/insert", async (req: Request, res: Response): Promise<void> => {
 });
 
 // User table
-app.post("/user", async (req: Request, res: Response) => {
-	const user = req.body.user;
-	try {
-		if (!user) {
-			res.status(400).send("Invalid input");
-		}
-		console.log(user);
 
-		const newUser = await prisma.user.create({	
-			data: user,
+app.post("/insert_all_users", async (req: Request, res: Response) => {
+	const users = req.body.users;
+	try {
+		if (!users) {
+			res.status(400).send("Invalid input");
+			return;
+		}
+		users.map(async (user: User) => {
+			const userData = { ...user, role: user.role as Role };
+			await prisma.user.create({
+				data: userData,
+			});
 		});
-		res.status(201).send(newUser);
+		res.status(201).send("Data entered");
+		return;
 	} catch (error) {
 		res.status(400).send("Error in entering User" + error);
+	}
+});
+
+app.get("/users/delete_all", async (req: Request, res: Response) => {
+	try {
+		const delete_success = await prisma.user.deleteMany({});
+
+		res
+			.status(200)
+			.send("Deleted all record: " + JSON.stringify(delete_success));
+		return;
+	} catch (error) {
+		res.status(500).send("error deleting all users: " + error);
+	}
+});
+
+// Generate Reports
+app.get("/generate-report", async (req: Request, res: Response) => {
+	await jsreportInstance.init();
+	try {
+		const out = await jsreportInstance.render({
+			template: {
+				content: "<h1>Hello world</h1>",
+				engine: "handlebars",
+				recipe: "chrome-pdf",
+			},
+		});
+		res.setHeader("Content-Type", "application/pdf");
+		out.stream.pipe(res);
+	} catch (e) {
+		if (e instanceof Error) {
+			res.status(500).send(e.message);
+		} else {
+			res.status(500).send("Unknown error");
+		}
 	}
 });
 

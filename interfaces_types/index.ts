@@ -9,9 +9,13 @@ export interface central_Data {
 	state_id: number;
 	district_id: number;
 }
-export interface User {
-	id?: number;
+export interface User { 
 	username: string;
 	password: string;
-	role: string;
+	role: Role;
+} 
+export enum Role {
+	ADMIN = "ADMIN",
+	STATE = "STATE",
+	DISTRICT = "DISTRICT"
 }
