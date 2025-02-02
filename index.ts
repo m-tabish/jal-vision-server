@@ -19,12 +19,12 @@ const app = express();
 app.use(cors(corsOptions));
 dotenv.config();
 
-const PORT = process.env.PORT || 3000;
+const PORT =  3000;
 app.use(express.json());
 app.use(sessionMiddleware);
 
 app.get("/", async (req: Request, res: Response) => {
-	res.send("Hello World");
+	res.send("Hello Worlds");
 });
 
 const prisma = new PrismaClient();
